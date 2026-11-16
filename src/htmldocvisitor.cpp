@@ -768,6 +768,15 @@ void HtmlDocVisitor::operator()(const DocInclude &inc)
                                        inc.stripCodeComments()
                                       );
       m_ci.endCodeFragment("DoxyCode");
+      if (inc.canGodbolt())
+      {
+          DString url = "https://godbolt.org/";
+          m_t << "<a href=\"" << convertToHtml(url)  << "\""
+              //<< href.attribs().toString() 
+              << ">";
+          m_t << "Godbolt";
+          m_t << "</a>";
+      }
       forceStartParagraph(inc);
       break;
   }
