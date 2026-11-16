@@ -41,6 +41,7 @@
 #include "reflist.h"
 #include "util.h"
 #include "vhdldocgen.h"
+#include <base64.h>
 
 static const int NUM_HTML_LIST_TYPES = 4;
 static const char g_types[][NUM_HTML_LIST_TYPES] = {"1", "a", "i", "A"};
@@ -769,9 +770,30 @@ void HtmlDocVisitor::operator()(const DocInclude &inc)
                                       );
       m_ci.endCodeFragment("DoxyCode");
       if (inc.canGodbolt())
-      {
-          DString url = "https://godbolt.org/";
-          m_t << "<a href=\"" << convertToHtml(url)  << "\""
+      { 
+        auto clientState = R"json({
+  "sessions": [
+    {
+      "id": 1,
+      "language": "c++",
+      "source": "int main() {}",
+      "compilers": [],
+      "executors": [
+        {
+          "compiler": {
+            "id": "clang_trunk",
+            "libs": [],
+            "options": "-std=c++20"
+          }
+        }
+      ]
+    }
+  ]
+})json";
+          DString url = "https://godbolt.org/clientstate/";
+          url += base64_encode(clientState);
+//          m_t << "<a href=\"" << convertToHtml(url)  << "\""
+          m_t << "<a href=\"" << url << "\""
               //<< href.attribs().toString() 
               << ">";
           m_t << "Godbolt";
