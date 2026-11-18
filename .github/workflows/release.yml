@@ -1,0 +1,74 @@
+name: Release Linux Binary
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build-linux-clang:
+    name: Ubuntu Clang Release (Intel)
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Read version
+      id: version
+      run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+
+    - name: Install libclang
+      run: |
+        sudo apt remove llvm-14 llvm-14-dev llvm-14-tools llvm-14-runtime clang-14 clang-format-14 libclang-common-14-dev libclang-cpp14 libclang1-14 libllvm14 2>/dev/null || true
+        sudo apt remove llvm-15 llvm-15-dev llvm-15-tools llvm-15-runtime clang-15 clang-format-15 libclang-common-15-dev libclang-cpp15 libclang1-15 libllvm15 2>/dev/null || true
+        sudo apt remove llvm-16 llvm-16-dev llvm-16-tools llvm-16-runtime clang-16 clang-format-16 libclang-common-16-dev libclang-cpp16 libclang1-16 libllvm16 2>/dev/null || true
+        sudo apt remove llvm-17 llvm-17-dev llvm-17-tools llvm-17-runtime clang-17 clang-format-17 libclang-common-17-dev libclang-cpp17 libclang1-17 libllvm17 2>/dev/null || true
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo apt-get update --fix-missing
+        sudo apt install -y libclang-common-18-dev libclang-18-dev clang-18 llvm-18 llvm-18-dev
+        sudo update-alternatives --install /usr/bin/clang   clang   /usr/bin/clang-18   100
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
+
+    - name: Configure
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        cmake -S . -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -G "Unix Makefiles" \
+          -Duse_libclang=YES \
+          -Dstatic_libclang=YES \
+          -Duse_libc++=NO
+
+    - name: Build
+      run: |
+        cmake --build build --parallel $(nproc)
+
+    - name: Package
+      run: |
+        VERSION=${{ steps.version.outputs.version }}
+        ARCHIVE="doxygen-${VERSION}.linux.bin.tar.gz"
+        mkdir -p "doxygen-${VERSION}/bin"
+        cp build/bin/doxygen "doxygen-${VERSION}/bin/doxygen"
+        tar -czf "${ARCHIVE}" "doxygen-${VERSION}"
+        echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_ENV"
+
+    - name: Upload to release
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ env.ARCHIVE }}
+
+    - name: Upload artifact (workflow_dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-artifact@v7
+      with:
+        name: doxygen-${{ steps.version.outputs.version }}.linux.bin
+        path: ${{ env.ARCHIVE }}
