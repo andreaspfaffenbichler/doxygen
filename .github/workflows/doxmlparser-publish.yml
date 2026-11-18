@@ -9,6 +9,9 @@ permissions:
 
 jobs:
   deploy:
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
 
     steps:
@@ -30,5 +33,3 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         packages-dir: addon/doxmlparser/dist/
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
