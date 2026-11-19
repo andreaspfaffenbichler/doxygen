@@ -89,12 +89,6 @@ jobs:
       shell: bash
       run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
 
-    - name: Install libiconv
-      shell: pwsh
-      run: |
-        curl.exe -L -o libiconv.7z https://github.com/pffang/libiconv-for-Windows/releases/download/v1.16/libiconv-for-Windows_1.16.7z
-        7z x libiconv.7z -olibiconv -y
-
     - name: Install bison/flex
       run: choco install winflexbison3
 
