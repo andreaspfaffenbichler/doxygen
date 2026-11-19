@@ -90,13 +90,10 @@ jobs:
       run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
 
     - name: Install libiconv
-      uses: suisei-cn/actions-download-file@v1
-      with:
-        url: "https://github.com/pffang/libiconv-for-Windows/releases/download/v1.16/libiconv-for-Windows_1.16.7z"
-        target: .
-
-    - name: Extract libiconv
-      run: 7z x libiconv-for-Windows_1.16.7z -olibiconv -y
+      shell: pwsh
+      run: |
+        curl -L -o libiconv.7z https://github.com/pffang/libiconv-for-Windows/releases/download/v1.16/libiconv-for-Windows_1.16.7z
+        7z x libiconv.7z -olibiconv -y
 
     - name: Install bison/flex
       run: choco install winflexbison3
