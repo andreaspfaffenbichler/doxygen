@@ -1,68 +1,58 @@
-Doxygen
-===============
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9HHLRBCC8B2B8)
+> [!IMPORTANT]
+> This is a—hopefully—temporary fork of the official Doxygen.
+> 
+> It provides the "Add "Godbolt" link for \snippet" feature.
+> See this pull request: https://github.com/doxygen/doxygen/pull/12455
+>
+### From the updated  documentation:
+ 
+` \snippet['{'option'}'] <file-name> ( block_id )`
+...
+The `option` can be:
+- ...
+- The `option` `*godbolt` can be used to show a link below the code to execute the file <file-name> on https://godbolt.org/.
+   The configuration of that execution is controlled by the file with the name given as an option, e.g., `gcc_162_godbolt`, 
+   which could look like this:
+```
+      {
+        "sessions": [
+          {
+            "id": 1,
+            "language": "c++",
+            "source": "$$godbolt$$",
+            "compilers": [],
+            "executors": [
+              {
+                "compiler": {
+                  "id": "g162",
+                  "libs": [],
+                  "options": "-std=c++20"
+                }
+              }
+            ]
+          }
+        ]
+      }
+```   
+   - `$$godbolt$$` is the placeholder where the snippet file is inserted.
+   - Such a file is called the "Client State" of Godbolt. The simplest way to get such a "Client State" is to set up 
+     the scene interactively and obtain a short link via "Share". This short link can then be easily transformed into JSON
+     via https://godbolt.org/api/shortlinkinfo/ `last part of short link`. These files are found in the INPUT directories.
 
-Doxygen is the de facto standard tool for generating documentation from
-annotated C++ sources, but it also supports other popular programming
-languages such as C, Objective-C, C#, PHP, Java, Python, IDL
-(Corba, Microsoft, and UNO/OpenOffice flavors), Fortran,
-and to some extent D. Doxygen also supports the hardware description language VHDL.
+### Testcase 154_snippet_godbolt.cpp
 
-Doxygen can help you in three ways:
+### Debug Doxyfile_DebugGodbolt
+For quick interactive start.
+in /testing
+output e.g.:  doxygen\out\build\x64-Debug\bin\debug-output\html
+makes: 
+<img width="822" height="611" alt="image" src="https://github.com/user-attachments/assets/7ddbeb15-53ea-41f0-846e-a3b7204be19a" />
+Click:
+<img width="710" height="547" alt="image" src="https://github.com/user-attachments/assets/5315ff83-f0ea-4f5e-9ac4-837d1fabc99e" />
 
-1. It can generate an online documentation browser (in HTML) and/or an
-   offline reference manual (in LaTeX) from a set of documented source files.
-   There is also support for generating output in RTF (MS-Word), PostScript,
-   hyperlinked PDF, compressed HTML, DocBook and Unix man pages.
-   The documentation is extracted directly from the sources, which makes
-   it much easier to keep the documentation consistent with the source code.
-2. You can configure doxygen to extract the code structure from undocumented
-   source files. This is very useful to quickly find your way in large
-   source distributions. Doxygen can also visualize the relations between
-   the various elements by means of include dependency graphs, inheritance
-   diagrams, and collaboration diagrams, which are all generated automatically.
-3. You can also use doxygen for creating normal documentation (as I did for
-   the doxygen user manual and doxygen website).
 
-Download
----------
-The latest binaries and Doxygen source code can be downloaded from:
-* https://www.doxygen.nl/
+### In Real World:
+https://www.alexweb.io/anyxx/talk_meeting_cpp26_samples_v26.html
+<img width="959" height="683" alt="image" src="https://github.com/user-attachments/assets/7cc84971-1a62-467a-8931-def6c436a675" />
 
-Developers
----------
-* Linux, Windows and MacOS Build Status: <a href="https://github.com/doxygen/doxygen/actions"><img alt="Github Actions Build Status" src="https://github.com/doxygen/doxygen/workflows/CMake%20Build%20for%20Doxygen/badge.svg"></a>
 
-* Coverity Scan Build Status: <a href="https://scan.coverity.com/projects/2860"> <img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/2860/badge.svg"/> </a>
-
-* Doxygen's <a href="https://doxygen.github.io/doxygen-docs/">internal source code documentation</a>
-
-* Install: Please read the installation section of the manual (https://www.doxygen.nl/manual/install.html)
-
-* Project stats: https://www.openhub.net/p/doxygen
-
-Issues, bugs, requests, ideas
-----------------------------------
-Use the [issue](https://github.com/doxygen/doxygen/issues) tracker to report bugs.
-
-Comms
-----------------------------------
-### Mailing Lists ###
-
-There are three mailing lists:
-
-* doxygen-announce@lists.sourceforge.net     - Announcement of new releases only
-* doxygen-users@lists.sourceforge.net        - for doxygen users
-* doxygen-develop@lists.sourceforge.net      - for doxygen developers
-* To subscribe follow the link to
-    * https://sourceforge.net/projects/doxygen/
-
-Source Code
-----------------------------------
-In May 2013, Doxygen moved from
-subversion to git hosted at GitHub
-* https://github.com/doxygen/doxygen
-
-Enjoy,
-
-Dimitri van Heesch (doxygen at gmail.com)
