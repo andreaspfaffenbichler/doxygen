@@ -1,4 +1,4 @@
-name: Release Linux Binary
+name: Release Binaries
 
 on:
   release:
