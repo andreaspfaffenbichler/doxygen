@@ -309,6 +309,16 @@ include(cmake/CompilerWarnings.cmake)
 include(cmake/Coverage.cmake)
 include(cmake/WindowsEncoding.cmake)
 
+include(FetchContent)
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG        v3.11.3
+    GIT_SHALLOW    TRUE
+)
+FetchContent_MakeAvailable(nlohmann_json)
+
 add_subdirectory(deps)
 add_subdirectory(libversion)
 add_subdirectory(libxml)
