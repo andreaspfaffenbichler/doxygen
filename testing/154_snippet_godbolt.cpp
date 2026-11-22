@@ -4,11 +4,11 @@
 /** \mainpage
  *  154
  *  A bubble sort algorithm on godbolt, default client state
- *  \snippet{godbolt} snippet_godbolt_test.cpp input
+ *  \snippet{godbolt(hallo+link)} snippet_godbolt_test.cpp input
 
  *  A bubble sort algorithm on godbolt, simple custom client state
- *  \snippet{simple_godbolt} snippet_godbolt_test.cpp input
+ *  \snippet{godbolt-iframe-simple,)} snippet_godbolt_test.cpp input
 
  *  A bubble sort algorithm on godbolt, client state for three compilers parallel
- *  \snippet{three_compilers_godbolt} snippet_godbolt_test.cpp input
+ *  \snippet{godbolt-link-three_compilers} snippet_godbolt_test.cpp input
  */

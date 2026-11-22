@@ -4036,7 +4036,7 @@ void DocPara::handleInclude(const DString &cmdName,DocInclude::Type t)
     }
     if (t==DocInclude::Snippet)
       if(auto found = std::find_if(optList.begin(),optList.end(),
-        [&](const DString& o){ return o.endsWith("godbolt");}); 
+        [&](const DString& o){ return o.startsWith("godbolt");}); 
         found != optList.end())
     {
       godboltClientState = *found;
